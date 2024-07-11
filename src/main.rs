@@ -1,10 +1,9 @@
 // modification
 mod config;
+
 use std::io;
 use std::io::BufReader;
 use std::fs::File;
-use std::io::{Read, Write};
-use serde::{Deserialize, Serialize}; // Deserialize Serialize lib
 use rodio::{Decoder, OutputStream, Sink}; // Decoder, OutputStream and Sink w/ rodio
 
 fn main() {
@@ -20,6 +19,7 @@ fn main() {
         let mut command = String::new(); // var to store command
         let _ = io::stdin().read_line(&mut command); // user input
         let command = command.trim(); // delete spaces
+
         if command.starts_with("ref ") {
             // processing the music path change command
             let new_music_path = command.trim_start_matches("ref ").trim(); // take new music path
@@ -29,6 +29,7 @@ fn main() {
             music_path = String::from(new_music_path); // update path to music
             println!("Music path set to: {}", music_path); // print new path
             seek_position = None; // rest search position
+
         } else if command.starts_with("ps ") {
             // processing search command
             let position_str = command.trim_start_matches("ps ").trim(); // take position
@@ -47,6 +48,19 @@ fn main() {
                     println!("Invalid seconds format."); // except
                 }
             }
+
+        } else if command.starts_with("sv ") {
+            let set_volume = command.replace("sv ", "");
+            let set_volume = set_volume.trim();
+            let set_volume: f32 = set_volume.parse().expect("gg");
+            sink.set_volume(set_volume);
+
+        } else if command.starts_with("ss ") {
+            let set_speed = command.replace("ss ", "");
+            let set_speed = set_speed.trim();
+            let set_speed: f32 = set_speed.parse().expect("gg");
+            sink.set_speed(set_speed);
+
         } else if command == "play" {
             // processing play command
             if !music_run {
@@ -61,6 +75,7 @@ fn main() {
                 sink.play(); // start play
                 music_run = true; // set music run flag to true /on
             }
+
         } else if command == "stop" {
             // processing stop command
             if music_run {
@@ -68,11 +83,13 @@ fn main() {
                 sink.pause(); // stop music
                 music_run = false; // set music run flag to false /off
             }
-        } else if command == "!cs" {
+
+        } else if command == "cs" {
             // set music pos
             let sec = sink.get_pos(); // take now pos
             let sec = sec.as_secs(); // convert to sec
             println!("{}", sec); // print now pos
+
         } else if command == "!exit" {
             // processing exit
             config::set_last_music(&music_path); // save last music path to config //// config file config.json //// my lib config.rs
@@ -80,5 +97,7 @@ fn main() {
             music_run = false; // set music run flag to false
             run = false; // stop main cycle and off program
         }
+
+
     }
 }
