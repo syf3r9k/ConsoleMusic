@@ -2,7 +2,7 @@
 
 This is my first project in Rust!
 
-This program is a CLI music player, utilizing the `{rodio, serde}` crates.
+This program is a CLI music player, with `{rodio, serde}` 
 
 ## Features (Current Version)
 
