@@ -1,2 +1,2 @@
 # ConsoleMusic
- Console music player! L: Rust
+ Console music player!
