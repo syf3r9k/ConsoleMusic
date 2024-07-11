@@ -15,12 +15,10 @@ fn main() {
     let mut run: bool = true;
     let mut music_run: bool = false;
     let mut seek_position: Option<u64> = None;
-
     while run {
         let mut command = String::new();
         let _ = io::stdin().read_line(&mut command);
         let command = command.trim();
-
         if command.starts_with("ref ") {
             let new_music_path = command.trim_start_matches("ref ").trim();
             sink.stop();
@@ -28,7 +26,7 @@ fn main() {
             music_run = false;
             music_path = String::from(new_music_path);
             println!("Music path set to: {}", music_path);
-            seek_position = None; // Сбрасываем позицию перемотки при смене трека
+            seek_position = None;
         } else if command.starts_with("ps ") {
             let position_str = command.trim_start_matches("ps ").trim();
             match position_str.parse::<u64>() {
